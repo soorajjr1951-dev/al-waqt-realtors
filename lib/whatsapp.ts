@@ -1,0 +1,3 @@
+export const whatsappNumber=(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER??"").replace(/\D/g,"");
+export function whatsappUrl(message:string){return /^[1-9]\d{7,14}$/.test(whatsappNumber)?`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`:null;}
+export function enquiryMessage(property:string,fields:Record<string,string>){return ["Hello Al Waqt, I would like to enquire about:",property,"",...Object.entries(fields).filter(([,value])=>value.trim()).map(([label,value])=>`${label}: ${value.trim()}`),"","Please confirm availability and the next steps. This is an enquiry, not a confirmed booking."].join("\n");}

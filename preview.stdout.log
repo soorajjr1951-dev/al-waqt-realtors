@@ -1,0 +1,13 @@
+▲ Next.js 16.4.3 (Turbopack)
+- Local:         http://localhost:3002
+- Network:       http://192.168.29.188:3002
+✓ Ready in 846ms
+✓ Running next.config.ts took 56ms
+
+ GET / 200 in 514ms (next.js: 262ms, application-code: 251ms)
+ GET / 200 in 101ms (next.js: 3ms, application-code: 98ms)
+ GET / 200 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET / 200 in 31ms (next.js: 2ms, application-code: 29ms)
+✓ Compiled in 8ms
+ GET / 200 in 37ms (next.js: 3ms, application-code: 34ms)
+ GET /listings/courtyard-family-villa 200 in 747ms (next.js: 12ms, generate-params: 692ms, application-code: 42ms)

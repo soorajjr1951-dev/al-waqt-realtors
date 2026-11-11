@@ -1,0 +1,113 @@
+/*
+  Nivasa additions on top of the Cityscape theme (public/cityscape/css/main.css).
+  This file is loaded after the theme, so it can override the theme's CSS variables.
+*/
+
+/* One palette for the whole site: the gold + navy of the theme's home design.
+   The inner-page layouts use an orange accent by default, so it is remapped here. */
+:root {
+  --main-h: 41;
+  --main-s: 62%;
+  --main-l: 54%;
+  --main-gradient: linear-gradient(90deg, #e2b559 0%, #d6a643 55%, #c4912f 100%);
+  --main-gradient-rev: linear-gradient(270deg, #e2b559 0%, #d6a643 55%, #c4912f 100%);
+}
+
+/* The theme's logo images are placeholders, so the brand is a wordmark. */
+.nivasa-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--plusjakarta-font);
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  text-decoration: none;
+}
+.nivasa-logo:hover { color: inherit; }
+.nivasa-logo__mark {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #d6a643;
+  color: #1c2d37;
+  font-size: 17px;
+}
+.nivasa-logo--light { color: #fff; }
+.nivasa-logo--dark { color: #1c2d37; }
+
+/* Hero cross-fade: every slide sits in the same grid cell and only the active one is visible. */
+.hero-fade { position: relative; overflow: hidden; display: grid; }
+.hero-fade__slide {
+  grid-area: 1 / 1;
+  min-width: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s ease, visibility 0s linear 1.2s;
+}
+.hero-fade__slide.is-active { opacity: 1; visibility: visible; transition: opacity 1.2s ease; }
+/* The theme hides a slide's text the instant it stops being active. Let it fade with the slide instead. */
+.hero-fade__slide.is-leaving .banner-9-title-box,
+.hero-fade__slide.is-leaving .banner-9-btn-box { opacity: 0; transform: none; transition: opacity 1.2s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-fade__slide, .hero-fade__slide.is-active { transition: none; }
+  .banner-9-active .swiper-slide.swiper-slide-active .banner-9-title-box,
+  .banner-9-active .swiper-slide.swiper-slide-active .banner-9-btn-box { transition: none; }
+}
+
+/*
+  The theme was designed around fixed-size placeholder images. Real photos have their own
+  proportions, so each slot is cropped to the ratio the layout expects.
+*/
+.banner-9-thumb > img { display: block; width: 100%; aspect-ratio: 1300 / 631; object-fit: cover; }
+.feature-9-thumb img { display: block; width: 100%; aspect-ratio: 340 / 381; object-fit: cover; }
+.about-9-thumb > img { display: block; width: 100%; aspect-ratio: 581 / 365; object-fit: cover; }
+.service-9-thumb img { display: block; width: 100%; aspect-ratio: 415 / 340; object-fit: cover; }
+
+/* Property cards: fixed crop so a row of cards lines up regardless of each photo's shape. */
+.property-item__thumb img { width: 100%; height: 100%; aspect-ratio: 410 / 252; object-fit: cover; }
+
+.properties-item img { width: 100%; height: 100%; aspect-ratio: 160 / 110; object-fit: cover; }
+.about-three-thumb__inner img { display: block; width: 100%; aspect-ratio: 520 / 535; object-fit: cover; }
+.loginRegister-thumb img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; }
+.cart-item__thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Inner pages use the same navy as the home design instead of the theme's neutral black. */
+.header.dark-header,
+section.breadcrumb,
+footer.footer,
+footer.footer + .bottom-footer,
+.common-card > .card-header { background-color: #1c2d37; }
+
+/* The featured-property tab bar is hard-coded to two tabs (220px); Nivasa has five. */
+.service-9-nav-tabs { width: max-content; max-width: 100%; justify-content: center; padding: 4px 6px 6px; }
+.service-9-nav-tabs .nav-link { padding: 7px 20px; }
+@media (max-width: 575px) {
+  .service-9-nav-tabs { border-radius: 24px; row-gap: 4px; }
+  .service-9-nav-tabs .nav-link { padding: 6px 14px; font-size: 13px; }
+}
+
+/* The theme lowercases this paragraph, which would turn "Nivasa" into "nivasa". */
+.about-9-left-paragraph { text-transform: none; }
+
+/* Several theme icons are orange gradients baked into the SVGs; nudge them toward the gold palette. */
+.counter-three-item__icon img,
+.amenities-content__icon img,
+.property-type-three-item__icon img,
+.dashboard-widget__icon img {
+  filter: hue-rotate(13deg) saturate(0.8);
+}
+.counter-three-item { min-width: 0; }
+
+/* Inline status messages for forms that are not connected to a backend yet. */
+.form-note {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #fbf3df;
+  color: #6b5316;
+  font-size: 14px;
+}

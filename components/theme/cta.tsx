@@ -1,0 +1,2 @@
+import Link from "next/link";
+export function Cta({title="Have a space to rent?",highlight="",text="Share the details with us on WhatsApp and start a conversation about listing your property.",href="/list-your-space",label="List your property"}:{title?:string;highlight?:string;text?:string;href?:string;label?:string}){return <section className="nv-bottom-cta"><div><h2>{title} {highlight}</h2><p>{text}</p></div><Link className="nv-primary" href={href}>{label}</Link></section>}

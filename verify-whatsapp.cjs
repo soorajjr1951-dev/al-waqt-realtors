@@ -1,0 +1,22 @@
+const fs=require('fs'),ts=require('typescript'),vm=require('vm'),assert=require('node:assert/strict');
+const source=ts.transpileModule(fs.readFileSync('lib/whatsapp.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText;
+const box={exports:{},process:{env:{NEXT_PUBLIC_WHATSAPP_NUMBER:'919999999999'}}};vm.runInNewContext(source,box);
+const fields={Name:'Test customer',Phone:'+91 90000 00000',Email:'test@example.com','Preferred visit':'2026-12-01','Move-in date':'2026-12-10',Occupants:'2',Message:'Parking & deposit?\nNeed a desk.',Empty:''};
+const message=box.exports.enquiryMessage('Twin-sharing PG room\nRent: ₹6,500 / month per person',fields);
+const url=new URL(box.exports.whatsappUrl(message));assert.equal(url.hostname,'wa.me');assert.equal(url.pathname,'/919999999999');assert.equal(url.searchParams.get('text'),message);for(const [key,value] of Object.entries(fields)){if(value)assert.ok(message.includes(`${key}: ${value}`));}assert.ok(!message.includes('Empty:'));assert.ok(message.includes('not a confirmed booking'));console.log('PASS: destination, all enquiry fields, multiline/Unicode encoding, optional-field omission and enquiry wording');
+const React=require('react/jsx-runtime');
+let assigned='',lastError='';
+const inventory={exports:{}};vm.runInNewContext(ts.transpileModule(fs.readFileSync('lib/spaces.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText,inventory);
+function component(file,name){const context={exports:{},require:(id)=>id==='react/jsx-runtime'?React:id==='react'?{useState:()=>['',v=>lastError=v]}:id==='@/lib/spaces'?inventory.exports:id==='@/lib/whatsapp'?box.exports:require(id),Date,FormData:class{constructor(form){this.fields=form}get(k){return this.fields[k]??null}entries(){return Object.entries(this.fields)[Symbol.iterator]()}},window:{location:{origin:'https://example.test',assign:url=>assigned=url}},Object,Array,String};vm.runInNewContext(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX}}).outputText,context);return context.exports[name];}
+const Viewing=component('components/spaces/viewing-form.tsx','ViewingForm');
+const tree=Viewing({title:'Land and house in Attingal · L2'});const form=tree.props.children[1];
+const customer={name:'Test renter',phone:'+91 90000 00000',email:'test@example.com',visit:'2099-01-02',movein:'2099-01-10',occupants:'2',message:'Desk & parking?'};
+form.props.onSubmit({preventDefault(){},currentTarget:customer});
+const actual=new URL(assigned).searchParams.get('text');for(const value of Object.values(customer))assert.ok(actual.includes(value));for(const value of ['L2','Sale','Price on enquiry','44 cents','4,500 sq ft','Attingal','https://example.test/listings/l2-land-and-house-attingal'])assert.ok(actual.includes(value));
+assigned='';form.props.onSubmit({preventDefault(){},currentTarget:{...customer,name:'   '}});assert.equal(assigned,'');assert.ok(lastError.includes('name'));
+form.props.onSubmit({preventDefault(){},currentTarget:{...customer,phone:'---'}});assert.equal(assigned,'');assert.ok(lastError.includes('contact'));
+const Owner=component('components/forms/list-space-form.tsx','ListSpaceForm');const owner={'Owner name':'Test owner',Phone:'+91 90000 00000','Property title':'Test home','Monthly rent (INR)':'12000','Property type':'Homes','Distance (km)':'2',Area:'900 sq ft','Property details':'Furnished & ready',Email:'test@example.com',consent:'on'};
+Owner().props.onSubmit({preventDefault(){},currentTarget:owner});const ownerMessage=new URL(assigned).searchParams.get('text');for(const [key,value] of Object.entries(owner))if(key!=='consent')assert.ok(ownerMessage.includes(value));assert.ok(!ownerMessage.includes('consent:'));
+console.log('PASS: customer and owner submit handlers carry every field and property context; invalid name/phone blocked; no external message sent');
+
+assert.equal(inventory.exports.spaces.length,29);assert.equal(new Set(inventory.exports.spaces.map(s=>s.slug)).size,29);assert.equal(inventory.exports.spaces.filter(s=>s.type==="Commercial").length,26);assert.ok(inventory.exports.spaces.every(s=>s.price===null));assert.equal(inventory.exports.spaces.find(s=>s.reference==="C24").size,"17,000 sq ft");assert.equal(inventory.exports.spaces.filter(s=>s.location==="Thonnaikal"&&s.size==="20 cents").length,1);console.log("PASS: inventory count, unique references, unknown prices, supplied area and merged duplicate");
