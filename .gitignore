@@ -1,4 +1,21 @@
-node_modules
-.next
-out
-.env*
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# OpenNext Cloudflare generated files
+.open-next/
+.wrangler/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Wrangler local files
+.dev.vars
