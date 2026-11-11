@@ -14,7 +14,7 @@ export function LoginForm() {
 
   return (
     <form onSubmit={submit}>
-      <h3 className="loginRegister__title text-poppins">Sign in to Al Waqt</h3>
+      <h3 className="loginRegister__title text-poppins">Sign in to Al-Waqt</h3>
       <p className="loginRegister__desc mb-4 font-18">Use your email address to manage saved spaces, enquiries and listings.</p>
       <div className="row gy-lg-4 gy-3">
         <div className="col-12">
